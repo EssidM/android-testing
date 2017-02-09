@@ -1,6 +1,6 @@
 # Android Testing
-This project will covers samples or Android Test cases : <b>unit</b> and <b>instrumentation</b> tests.
-For this we used some samples and tutorial like :
+This project will cover samples or Android Test cases : <b>unit</b> and <b>instrumentation</b> tests.
+For this we used some samples and tutorials like :
 
 * [Official Android documentation](https://developer.android.com/training/testing/start/index.html)
 * [myKong Email Validation Tutorial](https://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/)
