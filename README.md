@@ -26,7 +26,9 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class EmailValidatorTest {
 
-
+    /**
+    * valid emails test
+    */
     @Test
     public void testIsEmailValid() {
         String[] validEmails = {"mkyong@yahoo.com",
@@ -43,7 +45,7 @@ public class EmailValidatorTest {
 
 
     /**
-     * invalid email test
+     * invalid emails test
      */
     @Test
     public void InvalidEmailTest() {
