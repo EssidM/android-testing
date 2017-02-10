@@ -3,6 +3,7 @@ This project will cover samples or Android Test cases : <b>unit</b> and <b>instr
 For this we used some samples and tutorials like :
 
 * [Official Android documentation](https://developer.android.com/training/testing/start/index.html)
+* [Medium - the basis of Unit & intrumented Tests](https://medium.com/@ali.muzaffar/the-basics-of-unit-and-instrumentation-testing-on-android-7f3790e77bd#.a1yp8o8g2)
 * [myKong Email Validation Tutorial](https://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/)
 
 ## Case 1: Android Email Validation (Unit Testing)
@@ -62,7 +63,85 @@ public class EmailValidatorTest {
 }
 ```
 
-## Case 2: Unit Test with Mockito framework
+## Case 2 : DateUtils Test - Unit tests (Medium tutorial)
+* Create utility class named **DateUtils**, for date conversion & format.
+* Corresponding test class **DateUtilsTest** which test time conversion & day.
+
+Don't forget to adapt expected day value according to you **Default Locale** (I used SAM. , because my default locale is FR).
+
+##### DateUtil.java
+```java
+public class DateUtils {
+
+    private static final SimpleDateFormat DISPLAY;
+    private static final SimpleDateFormat DISPLAY_SHORT;
+
+    private static final long SECOND_MILLISECONDS = 1000l;
+    private static final long MINUTE_MILLISECONDS =
+            SECOND_MILLISECONDS * 60;
+    private static final long HOUR_MILLISECONDS =
+            MINUTE_MILLISECONDS * 60;
+    public static final long DAY_MILLISECONDS =
+            HOUR_MILLISECONDS * 24;
+
+    static {
+        //Use 12 or 24 hour time depending on device config.
+        DISPLAY = new SimpleDateFormat(
+                "EEEE, dd MMMM yyyy",
+                Locale.getDefault());
+        DISPLAY_SHORT = new SimpleDateFormat("EEE",
+                Locale.getDefault());
+        DISPLAY.setTimeZone(TimeZone.getDefault());
+        DISPLAY_SHORT.setTimeZone(TimeZone.getDefault());
+    }
+
+    public static Date epocSecondsToDate(long epocSeconds) {
+        Calendar c = Calendar.
+                getInstance(TimeZone.getTimeZone("UTC"));
+        c.setTimeInMillis(epocSeconds * 1000);
+        return c.getTime();
+    }
+
+    public static String dateToDayDateString(Date date,
+                                              boolean useShortFormat) {
+        if (useShortFormat) {
+            return DISPLAY_SHORT.format(date).toUpperCase();
+        } else {
+            return DISPLAY.format(date).toUpperCase();
+        }
+    }
+
+    public static String epocSecondsToDisplayDateTimeString(long epocSeconds) {
+        Date d = epocSecondsToDate(epocSeconds);
+        return dateToDayDateString(d, false);
+    }
+
+}
+```
+#####DateUtilTest
+This the corresponding test class which will tests date conversion & format.
+```java
+public class DateUtilsTest {
+    /**
+     * tests epoc to date conversion, and checks the day of the test date
+     */
+    @Test
+    public void testDateUtilFormat() {
+
+        long epoc = 1446885450; //7th Nov 2015
+
+        ///test EPOC to date conversion
+        Date date = DateUtils.epocSecondsToDate(epoc);
+        Assert.assertEquals("failed time millis conversion : ", date.getTime(), epoc * 1000);
+
+        //if EPOC conversion succeeds , test if the tested date gives a correct DAY.
+        String day = DateUtils.dateToDayDateString(date, true);
+        Assert.assertEquals("day is wrong ", "SAM.", day);
+    }
+}
+```
+
+## Case 3: Unit Test with Mockito framework
 
 From [Google official documentation</b>](https://developer.android.com/training/testing/unit-testing/local-unit-tests.html#build).
 
