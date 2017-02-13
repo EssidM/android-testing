@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AndroidTesting</string>
+    <string name="switch_activity">Switch activity</string>
 </resources>
