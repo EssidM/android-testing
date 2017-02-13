@@ -368,6 +368,41 @@ public class MainActivityTest {
 }
 ```
 
+## Case 6: Manual Rule's activity Launch - SecondActivity Test (Espresso)
+In this case, we will test if ```SecondActivity``` displays correctly the string passed in intent.
+For this,
+  * we removed the automatic launch of the activity under test (SecondActivity) by setting
+  the flag ```launchActivity``` to ```false``` as below
+
+  * Intent now is configured before launching activity from the rule as defined below, in the final
+``SecondActivityTest.java```
+
+```java
+/**
+ * Second activity class
+ *
+ * @author Mohamed Essid on 13/02/2017.
+ */
+public class SecondActivityTest {
+
+    //launch activity is set to false here to prevent that the activity is started automatically
+    //when test is launched
+    @Rule
+    public ActivityTestRule<SecondActivity> mRule =
+            new ActivityTestRule<>(SecondActivity.class, true, false);
+
+    @Test
+    public void testExtraTextDisplay() {
+        //prepare intent with the extra string
+        Intent intent = new Intent();
+        intent.putExtra(Constants.IntentParams.INPUT, "Hello");
+        mRule.launchActivity(intent);
+
+        //verify that the string passed is displayed
+        onView(withId(R.id.second_result_view)).check(matches(withText("Hello")));
+    }
+}
+```
 
 
 
