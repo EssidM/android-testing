@@ -141,8 +141,83 @@ public class DateUtilsTest {
     }
 }
 ```
+## Case 3: Unit test : RandomUtils
+In this case, we made a class **RandomUtils** which has a method named **randomString(int length)** that returns
+a random alphabetic string which length that corresponds to the parameter.
 
-## Case 3: Unit Test with Mockito framework
+Below the final RandomUtils & RandomUtilsTest classes
+* RandomUtils
+```java
+package com.leadit.androidtesting.util;
+
+import java.util.Random;
+
+import timber.log.Timber;
+
+/**
+ * Random values generator utility class
+ *
+ * @author Mohamed Essid on 10/02/2017.
+ */
+public class RandomUtils {
+
+
+    /**
+     * generates a random string
+     *
+     * @param length of the generated string
+     * @return
+     */
+    public static String randomString(int length) {
+        String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        Random random = new Random();
+        char[] result = new char[length];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = alphabet.charAt(random.nextInt(alphabet.length() - 1));
+        }
+
+        String randomString = String.copyValueOf(result);
+        Timber.d("Random generated string %s", randomString);
+        return randomString;
+    }
+}
+```
+* RandomUtilsTest
+```java
+package com.leadit.androidtesting.util;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.util.regex.Pattern;
+
+import static org.hamcrest.Matchers.is;
+
+/**
+ *Random Utils test class
+ */
+
+public class RandomUtilsTest {
+
+    /**
+     * tests random string method
+     */
+    @Test
+    public void testRandomString() {
+        int expectedSize = 10;
+        String random = RandomUtils.randomString(expectedSize);
+
+        //verify that the generated string's length is as expected
+        Assert.assertEquals("error in generating string length", expectedSize, random.length());
+
+        //verify that string is alphabetic
+        Pattern pattern = Pattern.compile("[a-zA-Z]+");
+        Assert.assertThat(String.format("%s is not alphabetic", random), pattern.matcher(random).matches(), is(true));
+    }
+}
+```
+
+## Case 4: Unit Test with Mockito framework
 
 From [Google official documentation</b>](https://developer.android.com/training/testing/unit-testing/local-unit-tests.html#build).
 
@@ -212,7 +287,7 @@ public class StringUtilTest {
 }
 ```
 
-## Case 4: Instrumentation Test (Espresso) - Medium tutorial
+## Case 5: Instrumentation Test (Espresso) - Medium tutorial
 Covers some Android Instrumentation  tutorials made by [Vogella](http://www.vogella.com/tutorials/AndroidTestingEspresso/article.html#espresso_introduction)
 
 * As said in the tutorial, "Espresso is a testing framework for Android to make it easy to write reliable user interface tests."

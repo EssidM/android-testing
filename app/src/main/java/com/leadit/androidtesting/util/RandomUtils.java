@@ -1,7 +1,5 @@
 package com.leadit.androidtesting.util;
 
-import android.util.Log;
-
 import java.util.Random;
 
 import timber.log.Timber;

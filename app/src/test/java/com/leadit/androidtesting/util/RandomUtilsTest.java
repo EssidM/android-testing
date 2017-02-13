@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 import static org.hamcrest.Matchers.is;
 
 /**
+ * RandomUtils test class
+ *
  * @author Mohamed Essid on 10/02/2017.
  */
 
