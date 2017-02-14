@@ -27,4 +27,11 @@
         android:layout_height="wrap_content"
         android:onClick="onClick"
         android:text="@string/switch_activity" />
+
+    <Button
+        android:id="@+id/main_btn_toast"
+        android:text="@string/btn_toast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick" />
 </LinearLayout>

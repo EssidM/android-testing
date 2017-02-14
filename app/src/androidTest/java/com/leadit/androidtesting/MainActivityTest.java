@@ -1,9 +1,12 @@
 package com.leadit.androidtesting;
 
 import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.matcher.RootMatchers;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.leadit.androidtesting.matcher.ToastMatcher;
 import com.leadit.androidtesting.util.Constants;
 
 import org.junit.Rule;
@@ -11,9 +14,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.core.StringStartsWith.startsWith;
 
 /**
  * {@link MainActivity} test class with Espresso framework
@@ -59,5 +68,14 @@ public class MainActivityTest {
 
         //Now we are in SecondActivity, check that the text received matches the expected
         onView(withId(R.id.second_result_view)).check(matches(withText("new text")));
+    }
+
+    /**
+     * test show toast
+     */
+    @Test
+    public void testShowToast() {
+        onView(withId(R.id.main_btn_toast)).perform(ViewActions.click());
+        onView(withText(R.string.toast)).inRoot(new ToastMatcher()).check(matches(isDisplayed()));
     }
 }

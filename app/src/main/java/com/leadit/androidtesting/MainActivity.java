@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.leadit.androidtesting.util.Constants;
 import com.leadit.androidtesting.util.RandomUtils;
@@ -26,12 +27,16 @@ public class MainActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.main_btn_change_text:
                 mInputEdit.setText(Constants.TEST_TEXT);
-            break;
+                break;
 
             case R.id.main_btn_switch:
                 Intent intent = new Intent(this, SecondActivity.class);
                 intent.putExtra(Constants.IntentParams.INPUT, mInputEdit.getText().toString());
                 this.startActivity(intent);
+                break;
+
+            case R.id.main_btn_toast:
+                Toast.makeText(this, R.string.toast, Toast.LENGTH_SHORT).show();
                 break;
         }
     }

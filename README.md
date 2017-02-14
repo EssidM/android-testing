@@ -6,7 +6,7 @@ For this we used some samples and tutorials like :
 * [Medium - the basis of Unit & intrumented Tests](https://medium.com/@ali.muzaffar/the-basics-of-unit-and-instrumentation-testing-on-android-7f3790e77bd#.a1yp8o8g2)
 * [**myKong** Email Validation Tutorial](https://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/)
 * [Android user interface testing with **Espresso**](http://www.vogella.com/tutorials/AndroidTestingEspresso/article.html#espresso_usageintroduction)
-
+* [QA Automated - Test Toast Message] (http://www.qaautomated.com/2016/01/how-to-test-toast-message-using-espresso.html)
 ## Case 1: Android Email Validation (Unit Testing)
 It's about unit testing based on JUnit 4.12
 Create a class named app/src/main/.../<b>EmailValidator</b> & app/src/test/.../<b>EmailValidatorTest</b>
@@ -482,3 +482,63 @@ public class MainActivityIntentTest {
     }
 }
 ```
+
+## Case 8 : Test Toast on MainActivity (Espresso
+In MainActivity, we've added a button that shows a Toast when clicked.
+In Order to test that the toast is correctly shown we need :
+
+  * in MainActivity , add a button and show a toast on click
+  ```java
+  public void onClick(View view) {
+          switch (view.getId()) {
+              //...
+              case R.id.main_btn_toast:
+                  Toast.makeText(this, R.string.toast, Toast.LENGTH_SHORT).show();
+                  break;
+          }
+      }
+  ```
+  * ```ToastMatcher``` which identifies a Toast.
+  ```java
+/**
+ * ToastMatcher
+ * <p>
+ * identifies a toast
+ *
+ */
+
+public class ToastMatcher extends TypeSafeMatcher<Root> {
+
+    @Override
+    protected boolean matchesSafely(Root root) {
+        int type = root.getWindowLayoutParams().get().type;
+        if ((type == WindowManager.LayoutParams.TYPE_TOAST)) {
+            IBinder windowToken = root.getDecorView().getWindowToken();
+            IBinder apiToken = root.getDecorView().getApplicationWindowToken();
+            if (windowToken == apiToken) {
+                //means that the window isn't contained by any other window
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void describeTo(Description description) {
+        description.appendText("is toast");
+    }
+}
+  ```
+  * In **MainActivityTest** add ```testToastShown()`` which is a test method to check the toast is correctly displayed.
+  ```java
+    /**
+     * test show toast
+     */
+    @Test
+    public void testShowToast() {
+        onView(withId(R.id.main_btn_toast)).perform(ViewActions.click());
+        onView(withText(R.string.toast)).inRoot(new ToastMatcher()).check(matches(isDisplayed()));
+    }
+  ````
+
+  * Now you can run the the test which should be passed.
