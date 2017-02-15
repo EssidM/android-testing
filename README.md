@@ -5,7 +5,7 @@ For this we used some samples and tutorials like :
 * [Official Android documentation](https://developer.android.com/training/testing/start/index.html)
 * [Medium - the basis of Unit & intrumented Tests](https://medium.com/@ali.muzaffar/the-basics-of-unit-and-instrumentation-testing-on-android-7f3790e77bd#.a1yp8o8g2)
 * [**myKong** Email Validation Tutorial](https://www.mkyong.com/regular-expressions/how-to-validate-email-address-with-regular-expression/)
-* [Android user interface testing with **Espresso**](http://www.vogella.com/tutorials/AndroidTestingEspresso/article.html#espresso_usageintroduction)
+* [Vogella - Android user interface testing with **Espresso**](http://www.vogella.com/tutorials/AndroidTestingEspresso/article.html#espresso_usageintroduction)
 * [QA Automated - Test Toast Message] (http://www.qaautomated.com/2016/01/how-to-test-toast-message-using-espresso.html)
 ## Case 1: Android Email Validation (Unit Testing)
 It's about unit testing based on JUnit 4.12
@@ -528,8 +528,8 @@ public class ToastMatcher extends TypeSafeMatcher<Root> {
         description.appendText("is toast");
     }
 }
-  ```
-  * In **MainActivityTest** add ```testToastShown()`` which is a test method to check the toast is correctly displayed.
+```
+  * In **MainActivityTest** add ```testToastShown()``` which is a test method to check the toast is correctly displayed.
   ```java
     /**
      * test show toast
@@ -539,6 +539,6 @@ public class ToastMatcher extends TypeSafeMatcher<Root> {
         onView(withId(R.id.main_btn_toast)).perform(ViewActions.click());
         onView(withText(R.string.toast)).inRoot(new ToastMatcher()).check(matches(isDisplayed()));
     }
-  ````
+  ```
 
   * Now you can run the the test which should be passed.
