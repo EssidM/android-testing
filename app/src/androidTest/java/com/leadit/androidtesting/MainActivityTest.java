@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
@@ -47,7 +48,7 @@ public class MainActivityTest {
         onView(withId(R.id.main_input)).perform(ViewActions.typeText("HELLO"), ViewActions.closeSoftKeyboard());
 
         //performing a click in order to change text
-        onView(withId(R.id.main_btn_change_text)).perform(ViewActions.click());
+        onView(withId(R.id.main_btn_change_text)).perform(click());
 
         //check if the current value has changed
         // and verify that it's value corresponds to the expected one
@@ -64,7 +65,7 @@ public class MainActivityTest {
 
         //performing a click in MainActivity to open SecondActivity with the text set in the
         //previous operation
-        onView(withId(R.id.main_btn_switch)).perform(ViewActions.click());
+        onView(withId(R.id.main_btn_switch)).perform(click());
 
         //Now we are in SecondActivity, check that the text received matches the expected
         onView(withId(R.id.second_result_view)).check(matches(withText("new text")));
@@ -75,7 +76,18 @@ public class MainActivityTest {
      */
     @Test
     public void testShowToast() {
-        onView(withId(R.id.main_btn_toast)).perform(ViewActions.click());
+        onView(withId(R.id.main_btn_toast)).perform(click());
         onView(withText(R.string.toast)).inRoot(new ToastMatcher()).check(matches(isDisplayed()));
     }
+
+    /**
+     * tests that async task is running totally and updated the view
+     */
+    @Test
+    public void testAsyncTask() {
+        onView(withId(R.id.main_btn_async)).perform(click());
+        onView(withId(R.id.main_txt_task_status)).check(matches(withText(R.string.done)));
+    }
+
+
 }

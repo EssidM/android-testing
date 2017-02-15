@@ -369,13 +369,13 @@ public class MainActivityTest {
 ```
 
 ## Case 6: Manual Rule's activity Launch - SecondActivity Test (Espresso)
-In this case, we will test if ```SecondActivity``` displays correctly the string passed in intent.
+In this case, we will test if ``SecondActivity`` displays correctly the string passed in intent.
 For this,
   * we removed the automatic launch of the activity under test (SecondActivity) by setting
-  the flag ```launchActivity``` to ```false``` as below
+  the flag ``launchActivity`` to ``false`` as below
 
   * Intent now is configured before launching activity from the rule as defined below, in the final
-```SecondActivityTest.java```
+``SecondActivityTest.java``
 
 ```java
 /**
@@ -409,9 +409,9 @@ public class SecondActivityTest {
 Test if the MainActivity is correctly configuring the intent in order to launch the SecondActivity.
 For this, we've tested:
 * **Intent Package** : to verify that the **intent's package*** corresponds to ```SecondActivity``'s package
-* **Intent Param** : to verify the intent param ```INPUT``` contains the expected value.
+* **Intent Param** : to verify the intent param ``INPUT`` contains the expected value.
 
-In this test case we used ```android.support.test.espresso.intent.rule.IntentsTestRuleÌnetentsTestRule```
+In this test case we used ``android.support.test.espresso.intent.rule.IntentsTestRuleÌnetentsTestRule``
 
 The test case was implemented in MainActivityIntentTest as below:
 ```java
@@ -498,7 +498,7 @@ In Order to test that the toast is correctly shown we need :
           }
       }
   ```
-  * ```ToastMatcher``` which identifies a Toast.
+  * ``ToastMatcher`` which identifies a Toast.
   ```java
 /**
  * ToastMatcher
@@ -529,7 +529,7 @@ public class ToastMatcher extends TypeSafeMatcher<Root> {
     }
 }
 ```
-  * In **MainActivityTest** add ```testToastShown()``` which is a test method to check the toast is correctly displayed.
+  * In **MainActivityTest** add ```testToastShown()`` which is a test method to check the toast is correctly displayed.
   ```java
     /**
      * test show toast
@@ -542,3 +542,69 @@ public class ToastMatcher extends TypeSafeMatcher<Root> {
   ```
 
   * Now you can run the the test which should be passed.
+
+## Case 9: Testing *asynchronous* code with Espresso
+
+For this, we've implemented a new feature on **MainActivity** which will start an **AsyncTask** on button
+click: we've added a ``ProgressDialog``to show task run status named **mProgress**, a ``TextView``
+named **mTaskStatusText** that will display *task is running* or *done* when task finishes,
+a new ``Button`` for launching the task and an **inner class** named **Task*** extends basic Android
+ ``AsyncTask`` class.
+
+* Task's implementation
+```java
+ /**
+     * fake async task
+     */
+    private class Task extends AsyncTask<String, Void, String> {
+
+        private int seconds = 5;
+
+        @Override
+        protected void onPreExecute() {
+            mProgress.setMax(seconds);
+            mProgress.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            int i = 0;
+            String taskName = params[0];
+            do {
+                i++;
+                Timber.d("Task %s is running @ %s", taskName, i);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mProgress.setProgress(i);
+            } while (i < seconds);
+
+            return "Long running asynchronous task";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            mProgress.cancel();
+        }
+    }
+```
+* In ``onClick(View)`` and for the related button , just start the async:
+```java
+new Task().execute(RandomUtils.randomString(10));
+```
+
+* In MainActivityTest, we performed a click on the task launch related button and will test on
+status text view value to check if it matches ``R.string.done`` that is set after task finishes.
+
+Below the method that's tests async task in ``MainActivityTest.java``:
+```java
+@Test
+    public void testAsyncTask() {
+        onView(withId(R.id.main_btn_async)).perform(click());
+        onView(withId(R.id.main_txt_task_status)).check(matches(withText(R.string.done)));
+    }
+```
+
+PS: we used ``RandomUtils.randomString(int)`` to give a random name to each new task.

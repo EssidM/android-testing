@@ -3,4 +3,8 @@
     <string name="switch_activity">Switch activity</string>
     <string name="toast">this is a toast</string>
     <string name="btn_toast">Click to toast</string>
+    <string name="done">Done !</string>
+    <string name="task_runnning">Task is running…</string>
+    <string name="btn_async">Launch Async task</string>
+    <string name="async">Asynchronous</string>
 </resources>

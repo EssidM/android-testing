@@ -30,8 +30,22 @@
 
     <Button
         android:id="@+id/main_btn_toast"
-        android:text="@string/btn_toast"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="onClick" />
+        android:onClick="onClick"
+        android:text="@string/btn_toast" />
+
+    <Button
+        android:id="@+id/main_btn_async"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="@string/btn_async" />
+
+    <TextView
+        android:id="@+id/main_txt_task_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
+
 </LinearLayout>
