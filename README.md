@@ -608,3 +608,78 @@ Below the method that's tests async task in ``MainActivityTest.java``:
 ```
 
 PS: we used ``RandomUtils.randomString(int)`` to give a random name to each new task.
+
+## Case 9: CustomMatchers : EditText hint test case
+We want to test if an `ÈditText` has the expected hint or not.
+
+* For this, we created a `CustomMatchers` class that contains `withItemHint(String)` to do checking
+stuff as shown below:
+```java
+package com.leadit.androidtesting.matcher;
+
+import android.support.test.espresso.matcher.BoundedMatcher;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.EditText;
+
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+
+import static android.support.test.espresso.intent.Checks.checkArgument;
+import static android.support.test.espresso.intent.Checks.checkNotNull;
+import static org.hamcrest.CoreMatchers.is;
+
+/**
+ * utilities class that contains all custom matchers
+ *
+ */
+
+public class CustomMatchers {
+
+    /**
+     * check if an {@link EditText} has the expected hint
+     *
+     * @param itemTextHint the expected item hint
+     * @return
+     */
+    public static Matcher<View> withItemHint(String itemTextHint) {
+        //use preconditions to fail fast when a test when a test is creating an invalid matcher
+        checkArgument(!TextUtils.isEmpty(itemTextHint));
+
+        return withItemHint(is(itemTextHint));
+
+    }
+
+    /**
+     * check if an {@link EditText} has the expected hint
+     *
+     * @param matcherText text matcher
+     * @return
+     */
+    private static Matcher<View> withItemHint(final Matcher<String> matcherText) {
+        // use preconditions to fail fast when a test is creating an invalid matcher.
+        checkNotNull(matcherText);
+
+        return new BoundedMatcher<View, EditText>(EditText.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with item hint: " + matcherText);
+            }
+
+            @Override
+            protected boolean matchesSafely(EditText item) {
+                return matcherText.matches(item.getHint().toString());
+            }
+        };
+    }
+}
+
+```
+* And now, in `MainActivityTest` class we will add the test method.
+```java
+ @Test
+    public void testInputHint() {
+        //checks that's main input has hint equals to expected value
+        onView(withId(R.id.main_input)).check(matches(withItemHint("Enter input to be passed to nex activity")));
+    }
+```

@@ -26,6 +26,7 @@ import static android.support.test.espresso.intent.Checks.checkNotNull;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.leadit.androidtesting.matcher.CustomMatchers.withItemHint;
 import static org.hamcrest.CoreMatchers.is;
 
 /**
@@ -92,23 +93,13 @@ public class MainActivityTest {
         onView(withId(R.id.main_txt_task_status)).check(matches(withText(R.string.done)));
     }
 
+    /**
+     * tests if the main_input has the expected hint or not
+     */
     @Test
     public void testInputHint() {
         //checks that's main input has hint equals to expected value
         onView(withId(R.id.main_input)).check(matches(withItemHint("Enter input to be passed to nex activity")));
     }
 
-    public static Matcher<View> withItemHint(String itemTextHint) {
-        //use preconditions to fail fast when a test when a test is creating an invalid matcher
-        checkArgument(!TextUtils.isEmpty(itemTextHint));
-
-        return withItemHint(is(itemTextHint));
-
-    }
-
-    private static Matcher<View> withItemHint(final Matcher<String> matcherText) {
-        checkNotNull(matcherText);
-
-       return new HintMatcher(matcherText);
-    }
 }
