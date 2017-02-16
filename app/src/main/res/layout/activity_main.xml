@@ -11,6 +11,7 @@
 
     <EditText
         android:id="@+id/main_input"
+        android:hint="@string/main_input_hint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

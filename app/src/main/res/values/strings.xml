@@ -7,4 +7,5 @@
     <string name="task_runnning">Task is running…</string>
     <string name="btn_async">Launch Async task</string>
     <string name="async">Asynchronous</string>
+    <string name="main_input_hint">Enter input to be passed to nex activity</string>
 </resources>

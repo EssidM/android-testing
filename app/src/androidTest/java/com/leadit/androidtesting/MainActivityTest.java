@@ -1,29 +1,32 @@
 package com.leadit.androidtesting;
 
 import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.matcher.RootMatchers;
-import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.EditText;
 
+import com.leadit.androidtesting.matcher.HintMatcher;
 import com.leadit.androidtesting.matcher.ToastMatcher;
 import com.leadit.androidtesting.util.Constants;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
+import static android.support.test.espresso.intent.Checks.checkArgument;
+import static android.support.test.espresso.intent.Checks.checkNotNull;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.core.StringStartsWith.startsWith;
 
 /**
  * {@link MainActivity} test class with Espresso framework
@@ -89,5 +92,23 @@ public class MainActivityTest {
         onView(withId(R.id.main_txt_task_status)).check(matches(withText(R.string.done)));
     }
 
+    @Test
+    public void testInputHint() {
+        //checks that's main input has hint equals to expected value
+        onView(withId(R.id.main_input)).check(matches(withItemHint("Enter input to be passed to nex activity")));
+    }
 
+    public static Matcher<View> withItemHint(String itemTextHint) {
+        //use preconditions to fail fast when a test when a test is creating an invalid matcher
+        checkArgument(!TextUtils.isEmpty(itemTextHint));
+
+        return withItemHint(is(itemTextHint));
+
+    }
+
+    private static Matcher<View> withItemHint(final Matcher<String> matcherText) {
+        checkNotNull(matcherText);
+
+       return new HintMatcher(matcherText);
+    }
 }
